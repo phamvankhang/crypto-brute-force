@@ -38,6 +38,8 @@ By redefining the problem from "check with an API" to "check against an in-memor
 
 - Number of Gorutines: 12
 
+- Results: brute-force speed ~435k wallets/second
+
 ![Alt text](./benmark.png?raw=true "Title")
 
 ## ⚙️ Installation & Run
