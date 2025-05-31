@@ -12,7 +12,8 @@ import (
 	"sync/atomic"
 	"time"
 	"encoding/csv"
-    // "encoding/hex"
+    // "sync"
+    "encoding/hex"
 
 	"github.com/ethereum/go-ethereum/crypto"
     "github.com/ethereum/go-ethereum/common"
@@ -27,6 +28,7 @@ var (
 	stopChan  = make(chan struct{})
 	countAddr uint64 // dùng atomic để đếm số lượng ví
     wordlist []string
+    // firstMatch sync.Once
 )
 
 func loadWordlist(path string) []string {
@@ -139,7 +141,9 @@ func bruteForceWorker(id int) {
 			address := strings.ToLower(crypto.PubkeyToAddress(*pubKey).Hex())
 
             if _, exists := topSet[address]; exists {
-				logChan <- fmt.Sprintf("🎯 MATCH FOUND: %s", privKey)
+                privateKeyBytes := crypto.FromECDSA(privKey)
+                privateKeyHex := hex.EncodeToString(privateKeyBytes)
+				logChan <- fmt.Sprintf("🎯 MATCH FOUND: %s", privateKeyHex)
 			}
 
 			atomic.AddUint64(&countAddr, 1)
